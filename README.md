@@ -1,5 +1,5 @@
 ## mysql难点要点总结
- - [约束(constraint)](src\main\sql\constraint.sql)
+ - [约束(constraint)](https://github.com/ActStrady/review-mysql/blob/master/src/main/sql/scheme.sql)
     - 约束可以在表内进行定义，也可以在创建完表之后进行追加（修改表）
     其主要的语法格式是`constraint 键名 键类型 (字段)`
     1. 主键约束PRIMARY KEY
