@@ -1,5 +1,5 @@
 ## mysql难点要点总结
- - [约束(constraint)](https://github.com/ActStrady/review-mysql/blob/master/src/main/sql/scheme.sql)
+ - [**约束(constraint)**](https://github.com/ActStrady/review-mysql/blob/master/src/main/sql/scheme.sql)
     - 约束可以在表内进行定义，也可以在创建完表之后进行追加（修改表）
     其主要的语法格式是`constraint 键名 键类型 (字段)`
     1. 主键约束PRIMARY KEY
@@ -31,7 +31,7 @@
     4. 非空约束 not null
         - 表示不可以为空值
         - 直接在建表时字段后加not null
-  - 常用的几个语句
+  - **常用的几个语句**
     1. default 
        - 用来给字段设置一个默认值
        - 直接在建表时字段后加default 默认值
@@ -39,7 +39,7 @@
         - 一般用来给主键设置自增
         - 直接在建表时字段后加auto increment = 数值， 可以设置自增开始数值
     3. 级联操作（删除，更新， 置空）
-        - 当定义了主外键关系时当我们删除主表的数据时，当从表对这条数据有引用时，这时无法删除主表数据，必须先删掉从表的数据，
+        - 当定义了主外键关系时当我们删除主表的数据时，当从表对这条数据有引用时，这时无法删除主表数据，必须先删掉从表的数据
         - 当使用级联删除时就可以删除会将从表的数据也一起删除，当使用级联置空时会将从表中对应的外键内容置为null，主表内容会删除。
         - 同样道理，级联就是更新主表时自动将从表数据自动更新
         - 在定义外键时在references后添加下面内容
@@ -57,3 +57,23 @@
          -- 开启
          set foreign_key_checks = 1;
        ```
+    5. binary 区分大小写
+        - 加在关键字前表示区分大小写一般用的很少
+    6. distinct 去除重复
+        - 放在 select 的字段前
+   - **DQL（Data Query Language）语句**
+     1. show语句
+        - show table status from database_name; 显示库中所有表的信息
+        - show table status where name = ‘table_name’; 显示表的信息
+        - show full columns from table_name;显示表的所有列信息（包含comment信息），当不加full时与desc的作用相同
+        - show full tables from database_name; 显示库中的表和视图
+        - show variables; 显示变量
+        - show create table(view) table_name; 显示建表(视图)语句
+        - show index from table_name; 显示表中索引信息
+     2. 分页实现（limit offset）
+        - limit 表示几条
+        - offset 表示从哪开始起始于0
+     3. 通配符 escape
+        - escape 允许确定一个转义字符，告诉DBMS紧跟在转义字符之后的字符看作是实际值
+        - 一个例子`like '%m%' escape ‘m'` “%M%”中的第二个百分符（%）作为实际值，而不是通配符。
+   
