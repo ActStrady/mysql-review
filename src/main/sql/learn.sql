@@ -81,16 +81,27 @@ show variables;
 select s.name, d.name
 from learn.student s
        join learn.department d
-                 on s.departmentId = d.id;
+            on s.departmentId = d.id;
 
 -- 左外连接
 select *
 from learn.student s
        left join learn.department d
-            on s.departmentId = d.id;
+                 on s.departmentId = d.id;
 
 -- 右外连接
 select *
 from learn.student s
        right join learn.department d
-                 on s.departmentId = d.id;
+                  on s.departmentId = d.id;
+
+-- 全连接
+select *
+from learn.student s
+       left join learn.department d
+                 on s.departmentId = d.id
+union
+select *
+from learn.student s
+       right join learn.department d
+                  on s.departmentId = d.id;
