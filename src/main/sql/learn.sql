@@ -11,14 +11,40 @@ create table learn.student
   id           int primary key auto_increment comment '主键',
   num          varchar(255) unique comment '学号',
   name         varchar(255) comment '姓名',
-  departmentId int not null comment '系名'
+  departmentId int comment '系号'
 );
 
+insert into learn.student
+values (null, 'z1111', '李华', '1');
+insert into learn.student
+values (null, 'z1112', '李宁', '1');
+insert into learn.student
+values (null, 'z1113', '王菲', '1');
+insert into learn.student
+values (null, 'z1115', null, '2');
+insert into learn.student
+values (null, 'z1116', '张五', '2');
+insert into learn.student
+values (null, 'z1117', null, null);
+insert into learn.student
+values (null, 'z1118', '刘搜', null);
+
+
+set foreign_key_checks = 0;
 drop table if exists learn.department;
 create table learn.department
 (
-  id int primary key auto_increment comment '主键'
+  id   int primary key auto_increment comment '主键',
+  name varchar(255)
 );
+set foreign_key_checks = 1;
+
+insert into learn.department
+values (null, '计算机');
+insert into learn.department
+values (null, '经管');
+insert into learn.department
+values (null, null);
 
 # 追加外键
 alter table learn.student
@@ -31,9 +57,6 @@ desc learn.student;
 
 # 查看建表语句
 show create table learn.student;
-
-insert into learn.student
-values (null, 'jjj', '亏', 1);
 
 select *
 from learn.student;
@@ -51,5 +74,23 @@ show table status where Name = 'student';
 show full columns from learn.student;
 
 desc learn.student;
-
+-- 显示变量
 show variables;
+
+-- 内连接查询
+select s.name, d.name
+from learn.student s
+       join learn.department d
+                 on s.departmentId = d.id;
+
+-- 左外连接
+select *
+from learn.student s
+       left join learn.department d
+            on s.departmentId = d.id;
+
+-- 右外连接
+select *
+from learn.student s
+       right join learn.department d
+                 on s.departmentId = d.id;

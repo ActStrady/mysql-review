@@ -1,5 +1,6 @@
 ## mysql难点要点总结
- - [**约束(constraint)**](https://github.com/ActStrady/review-mysql/blob/master/src/main/sql/scheme.sql)
+ ### 示例代码 [learn.sql](https://github.com/ActStrady/review-mysql/blob/master/src/main/sql/learn.sql)
+ - 约束(constraint)
     - 约束可以在表内进行定义，也可以在创建完表之后进行追加（修改表）
     其主要的语法格式是`constraint 键名 键类型 (字段)`
     1. 主键约束PRIMARY KEY
@@ -61,6 +62,8 @@
         - 加在关键字前表示区分大小写一般用的很少
     6. distinct 去除重复
         - 放在 select 的字段前
+    7. ifnull(？,？)
+        - ifnull()函数 不为null的时候取前一个值，为null取后一个
    - **DQL（Data Query Language）语句**
      1. show语句
         - show table status from database_name; 显示库中所有表的信息
@@ -76,4 +79,11 @@
      3. 通配符 escape
         - escape 允许确定一个转义字符，告诉DBMS紧跟在转义字符之后的字符看作是实际值
         - 一个例子`like '%m%' escape ‘m'` “%M%”中的第二个百分符（%）作为实际值，而不是通配符。
-   
+     4. 多表连接查询
+        - 内连接 (inner)join on inner可以省略，查询到的是左右表同时有的数据
+        - 左外连接(outer) left join on outer可以省略，查到的是符合条件左表为主的值，即使是右表数据为空
+            - 一个极端的例子是右表是空表，查到的数据右表的列都是null值
+        - 右外连接(outer) right join on outer可以省略,与左外连接意思一样
+        - #### 对于左右外连接，因为一般连接的表是带有外键关系的表，所以当左表是从表时，左连接查询多出来的是 从表外键为空的行，右连接查询多出来的是 从表根本没有的外键（主表有的主键而从表根本没有）
+        - 拿学生表和系别表来说，学生表有一个外键（系别id
+        ）指向系别表，当以学生表为左表的时候，左连接查询时会多出几条学生表外键为空的数据，右连接查询时会多出几条学生表中根本没有的系别这时候学生数据都为空。示例见learn.sql
