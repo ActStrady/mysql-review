@@ -16,12 +16,9 @@ public class JDBCUtil {
     private static final String URL;
     private static final String USER;
     private static final String PASSWORD;
-    private static Connection connection;
-
     // 静态代码块，只加载一次避免了资源浪费，读取配置文件
     static {
         Properties properties = new Properties();
-
         try {
             // 创建一个读取配置文件的输入流， @Cleanup 代表用完自动释放
             @Cleanup InputStream JDBCResource = JDBCUtil.class.getClassLoader().getResourceAsStream(
@@ -37,10 +34,11 @@ public class JDBCUtil {
         PASSWORD = properties.getProperty("password");
     }
 
-    public static Connection getConnection() throws SQLException, ClassNotFoundException {
+    public static Connection getConnection(String parameter) throws SQLException, ClassNotFoundException {
+        Connection connection;
         try {
             Class.forName(DRIVER);
-            connection = DriverManager.getConnection(URL, USER, PASSWORD);
+             connection = DriverManager.getConnection(URL + parameter, USER, PASSWORD);
             log.info("GetConnection successful!");
         } catch (ClassNotFoundException | SQLException e) {
             log.error("JDBCConnectionError", e);
