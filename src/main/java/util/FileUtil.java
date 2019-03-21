@@ -4,6 +4,7 @@ import lombok.Cleanup;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.*;
+import java.sql.BatchUpdateException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -17,7 +18,6 @@ import java.sql.SQLException;
 @Slf4j
 public class FileUtil {
 
-    private BufferedReader bufferedReader;
     private String filePath;
 
     /**
@@ -25,34 +25,31 @@ public class FileUtil {
      *
      * @param filePath 文件路径
      */
-    public FileUtil(String filePath) throws FileNotFoundException {
+    public FileUtil(String filePath) {
         this.filePath = filePath;
-        try {
-            bufferedReader = new BufferedReader(new FileReader(filePath));
-            log.info("read file successful!");
-        } catch (FileNotFoundException e) {
-            log.error("read file error!", e);
-            throw e;
-        }
     }
 
     /**
      * 文件的替换
+     *
      * @param regular 替换内容的正则表达式
      * @param revised 替换后的内容
      */
     public void replace(String regular, String revised) {
         try {
             String path = filePath.replace(".", "-new.");
-            BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(path));
+            @Cleanup BufferedReader bufferedReader = new BufferedReader(new FileReader(filePath));
+            @Cleanup BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(path));
             String line;
             while ((line = bufferedReader.readLine()) != null) {
-                bufferedWriter.write(line.replaceAll(regular, revised) + "\n");
+                String newLine = line.replaceAll(regular, revised);
+                log.debug(newLine);
+                bufferedWriter.write(newLine + "\n");
             }
-            log.info("replace file successful!");
         } catch (IOException e) {
             log.error("replace file error", e);
         }
+        log.info("replace file successful!");
     }
 
     public void fileToData(String jdbcParameter, String sql, String divide) {
@@ -61,11 +58,13 @@ public class FileUtil {
             // 关闭自动提交事务
             connection.setAutoCommit(false);
             @Cleanup PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            @Cleanup BufferedReader bufferedReader = new BufferedReader(new FileReader(filePath));
             String line;
             while ((line = bufferedReader.readLine()) != null) {
                 String[] data = line.split(divide);
                 for (int i = 0; i < data.length; i++) {
                     preparedStatement.setString(i + 1, data[i]);
+                    log.debug(data[i]);
                 }
                 // 添加到批量提交
                 preparedStatement.addBatch();
@@ -75,7 +74,8 @@ public class FileUtil {
             // 提交事务
             connection.commit();
         } catch (SQLException | IOException e) {
-            log.error("fileToData", e);
+            log.error("file to data error", e);
         }
+        log.info("file to data successful!");
     }
 }

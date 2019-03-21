@@ -105,3 +105,31 @@ select *
 from learn.student s
        right join learn.department d
                   on s.departmentId = d.id;
+
+-- 事物处理
+start transaction;
+
+set foreign_key_checks = 0;
+delete
+from db_school.student
+where id = 3;
+
+savepoint a;
+
+update db_school.student
+set name = '张ss'
+where id = 2;
+
+savepoint b;
+
+commit;
+
+set foreign_key_checks = 1;
+
+rollback to a;
+select *
+from db_school.student;
+
+select loc, count(*)
+from db_ip.ip_range
+group by loc;

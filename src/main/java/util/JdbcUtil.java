@@ -34,15 +34,14 @@ public class JdbcUtil {
             @Cleanup InputStream jdbcResource = JdbcUtil.class.getClassLoader().getResourceAsStream(
                     "jdbc.properties");
             properties.load(jdbcResource);
-            log.info("Read jdbc.properties successful!");
         } catch (IOException e) {
             log.error("Properties read error", e);
         }
         DRIVER = properties.getProperty("driverClass");
         URL = properties.getProperty("jdbcUrl");
         USER = properties.getProperty("user");
-        PASSWORD = properties.getProperty("password")
-        ;
+        PASSWORD = properties.getProperty("password");
+        log.info("Read jdbc.properties successful!");
     }
 
     /**

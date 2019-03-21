@@ -2,18 +2,22 @@ package util;
 
 import org.junit.Test;
 
-import java.io.File;
+import java.io.*;
 
 import static org.junit.Assert.*;
 
 public class FileUtilTest {
 
     @Test
-    public void replace() {
+    public void replace() throws FileNotFoundException {
         FileUtil fileUtil = new FileUtil("src/main/resources/ip.txt");
-        // FileUtil fileUtil = new FileUtil(FileUtil.class.getClassLoader().getResource("IP.txt").getPath());
         fileUtil.replace("(\\d+\\.+\\d+\\.+\\d+\\.+\\d+)\\s+", "$1¦");
-        // File file = new File(FileUtil.class.getClassLoader().getResource("IP.txt").getFile());
-        // System.out.println(file.getPath());
+    }
+
+    @Test
+    public void fileToData() throws FileNotFoundException {
+        FileUtil fileUtil = new FileUtil("src/main/resources/ip-new.txt");
+        fileUtil.fileToData("useUnicode=true&characterEncoding=utf8" +
+                "&rewriteBatchedStatements=true", "insert into db_ip.ip_range values (null, ?, ?, ?)", "¦");
     }
 }

@@ -69,3 +69,92 @@ insert into db_school.sc
 values (null, 3, 2);
 insert into db_school.sc
 values (null, 4, 4);
+
+-- ip 数据库
+drop database if exists db_ip;
+create database db_ip;
+
+-- ip范围地址表
+drop table if exists db_ip.ip_range;
+CREATE TABLE db_ip.ip_range
+(
+  id  int auto_increment primary key comment '主键',
+  min varchar(255) not null comment '范围左ip',
+  max varchar(255) not null comment '范围右ip',
+  loc varchar(255) not null comment '地址'
+);
+
+truncate table db_ip.ip_range;
+
+select count(*)
+from db_ip.ip_range;
+
+-- csdn泄露 数据库
+drop database if exists db_csdn;
+create database db_csdn;
+
+-- csdn 用户信息表
+drop table if exists db_csdn.userinfo;
+create table db_csdn.userinfo
+(
+  id       int auto_increment primary key comment '主键',
+  username varchar(255) not null comment '用户名',
+  password varchar(255) not null comment '密码',
+  email    varchar(255) not null unique comment '邮箱'
+) comment '用户信息表';
+
+-- 图书馆管理系统的数据库设计
+/*功能：
+1. 管理员登录，对图书进行 CRUD 操作
+2. 学生注册
+3. 学生登录，借书
+4. 学生登录，查询已借图书，还书*/
+
+drop database if exists db_lib;
+create database db_lib;
+
+-- 创建用户表
+drop table if exists db_lib.user;
+create table db_lib.user
+(
+  id       int auto_increment primary key comment 'id pk',
+  name     varchar(255) not null comment '姓名',
+  password varchar(255) not null comment '密码',
+  role     bit          not null default 0 comment '0-学生， 1-管理员'
+) comment '用户表';
+
+-- 创建图书表
+drop table if exists db_lib.book;
+create table db_lib.book
+(
+  id       int auto_increment primary key comment 'id pk',
+  bookName varchar(255) not null comment '书名',
+  author   varchar(255) not null comment '作者',
+  bNum     varchar(255) not null unique comment '编号'
+) comment '图书表';
+
+-- 创建借书表
+drop table if exists db_lib.borrowBook;
+create table db_lib.borrowBook
+(
+  id         int auto_increment primary key comment 'id pk',
+  userId     int      not null comment '借书用户id',
+  bookId     int      not null comment '书id',
+  borrowTime datetime not null default now() comment '借书时间',
+  returnTime datetime comment '还书时间'
+) comment '借书表';
+
+-- 追加外键
+alter table db_lib.borrowBook
+  add constraint
+    borrowBook_fk_userId
+    foreign key (userId)
+      references db_lib.user (id);
+
+alter table db_lib.borrowBook
+  add constraint
+    borrowBook_fk_bookId
+    foreign key (bookId)
+      references db_lib.book (id);
+
+source

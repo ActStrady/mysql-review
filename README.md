@@ -1,6 +1,6 @@
 ## mysql难点要点总结
- ### 示例代码 [learn.sql](https://github.com/ActStrady/review-mysql/blob/master/src/main/sql/learn.sql)
- - 约束(constraint)
+### 示例代码 [learn.sql](https://github.com/ActStrady/review-mysql/blob/master/src/main/sql/learn.sql)
+- #### 约束(constraint)
     - 约束可以在表内进行定义，也可以在创建完表之后进行追加（修改表）
     其主要的语法格式是`constraint 键名 键类型 (字段)`
     1. 主键约束PRIMARY KEY
@@ -32,7 +32,7 @@
     4. 非空约束 not null
         - 表示不可以为空值
         - 直接在建表时字段后加not null
-  - **常用的几个语句**
+- #### 常用的几个语句
     1. default 
        - 用来给字段设置一个默认值
        - 直接在建表时字段后加default 默认值
@@ -64,7 +64,7 @@
         - 放在 select 的字段前
     7. ifnull(？,？)
         - ifnull()函数 不为null的时候取前一个值，为null取后一个
-   - **DQL（Data Query Language）语句**
+- #### DQL（Data Query Language）语句
      1. show语句
         - show table status from database_name; 显示库中所有表的信息
         - show table status where name = ‘table_name’; 显示表的信息
@@ -92,3 +92,55 @@
             - 就是使用union来连接左右连接来实现
         ### 注：当on后的条件两个值一样时，可以使用using(值)来代替on，但一般用的少。
         
+- #### DTL(事务)
+    - 事务用在DML语句insert update delete,DQL和事务无关
+    - DDL（创建语句）会隐式提交事务
+    - 开启事务`start transaction;`
+    - 设置保留点`savepoint point-name`
+    - 显式提交事务的方式，回滚或者提交
+    - 回滚到保留点`rollback to point-name`
+    - 提交 `commit`
+    
+    - #### 实际上一般事务是用来防止删除更新出错
+    - 还有设置不自动提交`set autocommit = 0`
+- #### 常用函数
+    - abs 绝对值
+    - bin 转为二进制
+    - pi π的值
+    - trim 去除两端空格 rtrim 右空格 ltrim左空格
+    - lower 转换为小写
+    - current_date 当前日期
+    - now 现在的时间
+    - date_add 指定时间加上间隔时间`date_add(now(), interval 1 year)`
+    - dayofweek(date) 返回 date 所代表的一星期中的第几天(1~7)
+    - week(date) 返回日期 date 为一年中第几周(0~53)
+    - year(date) 返回日期 date 的年份(1000~9999)
+    - #### having 和 group by
+        - group by 一般是用在有函数列的查询，表示分组查询，having是组检索，是检索分组的内容
+- #### sql 导入数据和备份数据
+    - 导入
+        - `source file_name.sql` 在终端输入
+        - load    sql语句，使用切割符切后存入
+        ```
+        load data local infile 'path_to_your_csv_file'
+        into table your_db.your_table
+        fields terminated by ',' (column_name1, column_name2, ...)
+        set id = null;
+        ```
+    - 备份 在mysql的bin目录下执行
+        - `mysqldump -B -u your_mysql_username -p database_name > file_name.sql`
+- #### sql 视图
+    - 视图就是被存储的查询
+    - 语法
+    ```
+    create or replace view view_name as
+    select column_name
+    from table_name
+    where condition;
+    ```
+    - 查询视图
+      `SHOW FULL TABLES IN database_name WHERE TABLE_TYPE LIKE 'VIEW';`
+    - updatable view 简单查询 生成的，可以修改基表的数据
+    - read-only view 复杂查询 生成的，不可以修改基表的数据
+    
+    
