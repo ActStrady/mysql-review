@@ -1,6 +1,6 @@
 ### Java template
-# Compiled class file
-*.class
+# Compiled file
+out
 
 # BlueJ files
 *.ctxt
@@ -19,8 +19,10 @@
 
 # idea
 .idea
+
+# log
+log
+
 # gradle
 .gradle
 
-# iml
-*.iml
