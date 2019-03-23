@@ -107,6 +107,7 @@ from learn.student s
                   on s.departmentId = d.id;
 
 -- 事物处理
+-- 开启事物
 start transaction;
 
 set foreign_key_checks = 0;
@@ -114,6 +115,7 @@ delete
 from db_school.student
 where id = 3;
 
+-- 设置保留点
 savepoint a;
 
 update db_school.student
@@ -122,14 +124,30 @@ where id = 2;
 
 savepoint b;
 
+-- 回滚
+rollback to a;
+
+-- 提交
 commit;
 
 set foreign_key_checks = 1;
 
-rollback to a;
 select *
 from db_school.student;
 
+-- 分组查询
 select loc, count(*)
 from db_ip.ip_range
 group by loc;
+
+-- 索引
+# 查看索引
+show index from db_ip.ip_range;
+
+# 创建索引
+create index idx_min on db_ip.ip_range(min);
+show index from db_ip.ip_range;
+
+# 删除索引
+drop index idx_min on db_ip.ip_range;
+show index from db_ip.ip_range;

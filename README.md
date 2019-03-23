@@ -142,5 +142,20 @@
       `SHOW FULL TABLES IN database_name WHERE TABLE_TYPE LIKE 'VIEW';`
     - updatable view 简单查询 生成的，可以修改基表的数据
     - read-only view 复杂查询 生成的，不可以修改基表的数据
-    
+- 索引 index
+    - 索引用来提高查询效率，但带来的问题就是索引也要占据内存，非必要的列不建议加索引
+    - mysql的主键和外键(仅仅在innodb下)和唯一约束默认为索引
+    - 语法
+        ```
+        # 查看索引
+        show index from db_ip.ip_range;
+        
+        # 创建索引
+        create index idx_min on db_ip.ip_range(min);
+        show index from db_ip.ip_range;
+        
+        # 删除索引
+        drop index idx_min on db_ip.ip_range;
+        show index from db_ip.ip_range;
+        ```
     

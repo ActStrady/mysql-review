@@ -22,11 +22,8 @@ public class JdbcUtil {
     private static final String URL;
     private static final String USER;
     private static final String PASSWORD;
-    // 静态代码块，只加载一次避免了资源浪费，读取配置文件
 
-    /**
-     * 静态代码块，用来加载一次配置文件
-     */
+    // 静态代码块，只加载一次避免了资源浪费，读取配置文件
     static {
         Properties properties = new Properties();
         try {
@@ -48,8 +45,6 @@ public class JdbcUtil {
      * 以默认的配置文件获取jdbc连接,
      *
      * @return Connection 连接
-     * @throws SQLException           sql异常
-     * @throws ClassNotFoundException 驱动读取不到
      */
     public static Connection getConnection() {
         Connection connection = null;
@@ -68,7 +63,6 @@ public class JdbcUtil {
      *
      * @return Connection 连接
      * @throws SQLException           sql异常
-     * @throws ClassNotFoundException 驱动读取不到
      */
     public static Connection getConnection(String parameter) throws SQLException {
         Connection connection;

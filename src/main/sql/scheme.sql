@@ -103,6 +103,8 @@ create table db_csdn.userinfo
   email    varchar(255) not null unique comment '邮箱'
 ) comment '用户信息表';
 
+
+
 -- 图书馆管理系统的数据库设计
 /*功能：
 1. 管理员登录，对图书进行 CRUD 操作
@@ -156,5 +158,3 @@ alter table db_lib.borrowBook
     borrowBook_fk_bookId
     foreign key (bookId)
       references db_lib.book (id);
-
-source
