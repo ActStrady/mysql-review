@@ -26,10 +26,7 @@ public class JdbcUtil {
     // 静态代码块，只加载一次避免了资源浪费，读取配置文件
     static {
         Properties properties = new Properties();
-        try {
-            // 创建一个读取配置文件的输入流， @Cleanup 代表用完自动释放
-            @Cleanup InputStream jdbcResource = JdbcUtil.class.getClassLoader().getResourceAsStream(
-                    "jdbc.properties");
+        try (InputStream jdbcResource = JdbcUtil.class.getClassLoader().getResourceAsStream("jdbc.properties")) {
             properties.load(jdbcResource);
         } catch (IOException e) {
             log.error("Properties read error", e);
@@ -62,7 +59,7 @@ public class JdbcUtil {
      * 以自己提供的参数来获取jdbc连接,
      *
      * @return Connection 连接
-     * @throws SQLException           sql异常
+     * @throws SQLException sql异常
      */
     public static Connection getConnection(String parameter) throws SQLException {
         Connection connection;

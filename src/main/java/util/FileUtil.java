@@ -1,10 +1,8 @@
 package util;
 
-import lombok.Cleanup;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.*;
-import java.sql.BatchUpdateException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -17,48 +15,45 @@ import java.sql.SQLException;
  **/
 @Slf4j
 public class FileUtil {
-
-    private String filePath;
-
     /**
-     * 有参构造用来read文件
+     * 文件内容的替换
      *
      * @param filePath 文件路径
+     * @param regular  替换内容的正则表达式
+     * @param revised  替换后的内容
+     * @return 替换后文件路径
      */
-    public FileUtil(String filePath) {
-        this.filePath = filePath;
-    }
-
-    /**
-     * 文件的替换
-     *
-     * @param regular 替换内容的正则表达式
-     * @param revised 替换后的内容
-     */
-    public void replace(String regular, String revised) {
-        try {
-            String path = filePath.replace(".", "-new.");
-            @Cleanup BufferedReader bufferedReader = new BufferedReader(new FileReader(filePath));
-            @Cleanup BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(path));
+    public static String replace(String filePath, String regular, String revised) {
+        String path = filePath.replace(".", "-new.");
+        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(filePath));
+             BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(path))) {
             String line;
             while ((line = bufferedReader.readLine()) != null) {
                 String newLine = line.replaceAll(regular, revised);
-                log.debug(newLine);
                 bufferedWriter.write(newLine + "\n");
             }
         } catch (IOException e) {
             log.error("replace file error", e);
         }
         log.info("replace file successful!");
+        return path;
     }
 
-    public void fileToData(String jdbcParameter, String sql, String divide) {
-        try {
-            @Cleanup Connection connection = JdbcUtil.getConnection(jdbcParameter);
-            // 关闭自动提交事务
+    /**
+     * 利用java切割字符串的方式批量插入，效率低下，不建议使用 建议使用原生的sql load来做
+     * jdk1.7 后新特性，在try后括号的内容自动释放
+     *
+     * @param filePath      文件路径
+     * @param jdbcParameter jdbc的参数
+     * @param sql           sql语句
+     * @param divide        切割符
+     */
+    public static void fileToData(String filePath, String jdbcParameter, String sql, String divide) {
+        try (Connection connection = JdbcUtil.getConnection(jdbcParameter);
+             PreparedStatement preparedStatement = connection.prepareStatement(sql);
+             BufferedReader bufferedReader = new BufferedReader(new FileReader(filePath))) {
+            // 关闭自动提交
             connection.setAutoCommit(false);
-            @Cleanup PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            @Cleanup BufferedReader bufferedReader = new BufferedReader(new FileReader(filePath));
             String line;
             while ((line = bufferedReader.readLine()) != null) {
                 String[] data = line.split(divide);
@@ -74,7 +69,7 @@ public class FileUtil {
             // 提交事务
             connection.commit();
         } catch (SQLException | IOException e) {
-            log.error("file to data error", e);
+            log.error("file to data error!", e);
         }
         log.info("file to data successful!");
     }

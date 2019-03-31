@@ -70,41 +70,6 @@ values (null, 3, 2);
 insert into db_school.sc
 values (null, 4, 4);
 
--- ip 数据库
-drop database if exists db_ip;
-create database db_ip;
-
--- ip范围地址表
-drop table if exists db_ip.ip_range;
-CREATE TABLE db_ip.ip_range
-(
-  id  int auto_increment primary key comment '主键',
-  min varchar(255) not null comment '范围左ip',
-  max varchar(255) not null comment '范围右ip',
-  loc varchar(255) not null comment '地址'
-);
-
-truncate table db_ip.ip_range;
-
-select count(*)
-from db_ip.ip_range;
-
--- csdn泄露 数据库
-drop database if exists db_csdn;
-create database db_csdn;
-
--- csdn 用户信息表
-drop table if exists db_csdn.userinfo;
-create table db_csdn.userinfo
-(
-  id       int auto_increment primary key comment '主键',
-  username varchar(255) not null comment '用户名',
-  password varchar(255) not null comment '密码',
-  email    varchar(255) not null unique comment '邮箱'
-) comment '用户信息表';
-
-
-
 -- 图书馆管理系统的数据库设计
 /*功能：
 1. 管理员登录，对图书进行 CRUD 操作
