@@ -115,6 +115,8 @@
     - dayofweek(date) 返回 date 所代表的一星期中的第几天(1~7)
     - week(date) 返回日期 date 为一年中第几周(0~53)
     - year(date) 返回日期 date 的年份(1000~9999)
+    - inet_aton 用来把ip地址转换为数值
+    - inet_ntoa 用来把数值转化为ip
     - #### having 和 group by
         - group by 一般是用在有函数列的查询，表示分组查询，having是组检索，是检索分组的内容
 - #### sql 导入数据和备份数据
