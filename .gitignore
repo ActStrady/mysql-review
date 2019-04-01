@@ -26,3 +26,9 @@ log
 
 # gradle
 .gradle
+
+# resources
+csdn.sql
+csdn-new.sql
+IP.txt
+ip-new.txt
