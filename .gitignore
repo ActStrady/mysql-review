@@ -28,7 +28,7 @@ log
 .gradle
 
 # resources
-/src/main/resources/csdn.sql
-csdn-new.sql
-IP.txt
-ip-new.txt
+#/src/main/resources/csdn.sql
+#csdn-new.sql
+#IP.txt
+#ip-new.txt
