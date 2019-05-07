@@ -1,4 +1,4 @@
-## mysql难点要点总结
+## mysql复习与深入理解
 ### 示例代码 [learn.sql](https://github.com/ActStrady/review-mysql/blob/master/src/main/sql/learn.sql)
 - #### 约束(constraint)
     - 约束可以在表内进行定义，也可以在创建完表之后进行追加（修改表）
